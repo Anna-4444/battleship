@@ -5,6 +5,7 @@ import { renderBoard } from "./user-interface/render-board.js";
 import { renderLandingPage } from "./user-interface/render-landing-page.js";
 import "./styles.css";
 
+
 document.addEventListener("DOMContentLoaded", () => {
     renderLandingPage();
 })

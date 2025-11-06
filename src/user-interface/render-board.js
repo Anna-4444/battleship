@@ -1,3 +1,4 @@
+import { renderPassScreen } from "./render-pass-screen";
 
 
 export function renderBoard(player, opponent) {
@@ -8,40 +9,42 @@ export function renderBoard(player, opponent) {
     messageContainer.classList.add("message");
     const boardContainer = document.createElement("div");
     boardContainer.classList.add("boards");
-    container.append(messageContainer, boardContainer);
-
+    const buttonContainer = document.createElement("div")
+    buttonContainer.classList.add("button-div")
+    container.append(messageContainer, boardContainer, buttonContainer);
+    
     const defenceBoardContainer = document.createElement("div");
     defenceBoardContainer.classList.add("defence");
     player.gameboard.oceanGrid.forEach((row, r) => {
         let rowDiv = document.createElement("div");
         rowDiv.classList.add("row");
         row.forEach((square, c) => {
-           let squareDiv = document.createElement("div");
-           squareDiv.classList.add("square");
-           squareDiv.dataset.row = r;
-           squareDiv.dataset.column = c;
-           switch(square) {
-            case 0:
-                break;
-            case "miss":
-                squareDiv.classList.add("miss");
-                break;
-            case "hit":
-                squareDiv.classList.add("hit");
-                break;
-            default:
-                squareDiv.classList.add("ship");
-                break;
-           }
-           //squareDiv.addEventListener("drop", player.gameboard.placeShip(ship, length, startPos, isHorizontal));
-           //this eventListener will be for the setup render only
-           rowDiv.append(squareDiv);
+            let squareDiv = document.createElement("div");
+            squareDiv.classList.add("square");
+            squareDiv.dataset.row = r;
+            squareDiv.dataset.column = c;
+            switch(square) {
+                case 0:
+                    break;
+                case "miss":
+                    squareDiv.classList.add("miss");
+                    break;
+                case "hit":
+                    squareDiv.classList.add("hit");
+                    break;
+                default:
+                    squareDiv.classList.add("occupied");
+                    break;
+            }
+     
+            rowDiv.append(squareDiv);
         })
         defenceBoardContainer.append(rowDiv); 
     })
-
+    
     const attackBoardContainer = document.createElement("div");
     attackBoardContainer.classList.add("attack");
+    let attackEnabled = true;
     opponent.gameboard.oceanGrid.forEach((row, r) => {
         let rowDiv = document.createElement("div");
         rowDiv.className = "row";
@@ -50,21 +53,44 @@ export function renderBoard(player, opponent) {
             squareDiv.classList.add("square");
             squareDiv.dataset.row = r;
             squareDiv.dataset.column = c;
-            squareDiv.addEventListener("click", function(event) {handleAttack(player, opponent, r, c, event)}) 
+            switch(square) {
+                case 0:
+                    break;
+                case "miss":
+                    squareDiv.classList.add("miss");
+                    break;
+                case "hit":
+                    squareDiv.classList.add("hit");
+                    break;
+            }
+            squareDiv.addEventListener("click", (event) => {
+                if (!attackEnabled) return;
+                attackEnabled = false;
+                handleAttack(player, opponent, r, c, event);
+                // attackBoardContainer.classList.add("disabled");
+            }) 
             rowDiv.append(squareDiv);
         }) 
         attackBoardContainer.append(rowDiv);
     })
-
+    
     boardContainer.append(defenceBoardContainer, attackBoardContainer);
+
+    const switchBtn = document.createElement("button");
+    switchBtn.innerText = "SWITCH PLAYERS";
+    switchBtn. addEventListener("click", () => {
+        renderPassScreen(player, opponent);
+    });
+    buttonContainer.append(switchBtn);
 }
 
 export function handleAttack(player, opponent, r, c, event) {
     const messageContainer = document.querySelector(".message");
     messageContainer.innerText = "";
+    
     const result = opponent.gameboard.receiveAttack(player, r, c, event);
     if (!result) {
-        messageContainer.innerText = "That square has already been attacked, try again";
+        messageContainer.innerText = "That location has already been attacked, try again";
         return;
     }
     if (result.result === "miss") {
@@ -75,6 +101,6 @@ export function handleAttack(player, opponent, r, c, event) {
         event.target.classList.add("hit");
         messageContainer.innerText = result.message;
     }
-    // if (sunk) {...} I could add an effect for a sunk ship
+    // if (sunk) {...} I could add an effect for a sunk ship // disable board and pass device
     // if (gameover) { gameover()} ... maybe just add a button the says play again or reset? disable the board
 }

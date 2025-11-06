@@ -9,7 +9,61 @@
     <header>
         <h1>BATTLESHIP</h1>
     </header>
-    <div class="main-container"></div>
-    
+
+    <section class="main-container"></section>
+
+    <section class="landing-page">
+        <div class="button-div"></div>
+        <button class="rules-btn">VIEW RULES</button>
+        <div class="rules-div">
+            <!-- <button class="rules-btn">VIEW RULES</button> -->
+            <div class="rules hide">
+                <h3>Objective</h3>
+                <p>~ Sink all of your opponent's ships before they sink yours.</p>
+                <h3>Setup</h3>
+                <p>~ Each player has their own 10x10 grid.
+                <br>~ Players secretly place their fleet of ships on their grid vertically or horizontally, not diagonally. Ships cannot overlap.
+                <br>~ Standard fleet:
+                <br>  - Aircraft Carrier- 5 squares
+                <br>  - Battleship- 4 squares
+                <br>  - Submarine- 3 squares
+                <br>  - Cruiser- 3 squares
+                <br>  - Destroyer- 2 squares</p>
+                <h3>Gameplay</h3>
+                <p>~ Players take turns attacking a target square on the opponent's grid.
+                <br>~ When all squares of a ship have been hit, that ship is sunk.</p>
+                <h3>Winning</h3>
+                <p>~ The first player to sink all of the opponent's ships wins the game.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="one-player-form hide">
+        <div class="form-div">
+            <form id="one-play-form">
+                <div>
+                    <label for="1playername">Player 1 Name: </label>
+                    <input type="text" id="1playername" name="player1" required>
+                </div>
+                <div class="button-div"></div>
+            </form>
+        </div>
+    </section>
+
+    <section class="two-player-form hide">
+        <div class="form-div">
+            <form id="two-play-form">
+                <div>
+                    <label for="player1name">Player 1 Name: </label>
+                    <input type="text" id="player1name" name="player1" required>
+                </div>
+                <div>
+                    <label for="player2name">Player 2 Name: </label>
+                    <input type="text" id="player2name" name="player2" required>
+                </div>
+                <div class="button-div"></div>
+            </form>
+        </div>
+    </section>
 </body>
 </html>

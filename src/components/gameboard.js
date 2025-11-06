@@ -10,7 +10,7 @@ export class GameBoard {
         this.sunkShips = 0;
     }
     
-    placeShip(ship, length, startPos, isHorizontal) { //argument might not be an object
+    placeShip(ship, length, startPos, isHorizontal, dryRun = false) { //argument might not be an object
         // Out of bounds check
         if (isHorizontal && startPos[1] + length > 10) return false
         if (!isHorizontal && startPos[0] + length > 10) return false
@@ -19,6 +19,8 @@ export class GameBoard {
         // Check for ship overlap
         const isOverlapping = coordinates.some(([i, j]) => this.oceanGrid[i][j] !== 0);
         if (isOverlapping) return false;
+        // If this is just a preview, return true without modifying anything
+        if (dryRun) return true;
         // Place ship on oceanGrid
         coordinates.forEach(([i, j]) => {this.oceanGrid[i][j] = ship})
         // Create ship instance
@@ -44,14 +46,14 @@ export class GameBoard {
     receiveAttack(player, r, c) {
         if (this.oceanGrid[r][c] === 0) {
             this.oceanGrid[r][c] = "miss";
-            let message = "You missed!";
+            let message = `You missed! It is ${player.name}'s turn. Click SWITCH PLAYERS.`;
             return { result: "miss", message: message };
         } 
         for (let ship of this.shipFleet) {
             if (this.oceanGrid[r][c] === ship.name) {
                 this.oceanGrid[r][c] = "hit";
                 ship.hit(); 
-                let message = `You hit the ${ship.name}! It has ${ship.hits === 1 ? "hit" : "hits"}.`;
+                let message = `You hit the ${ship.name}! It has ${ship.hits} ${ship.hits === 1 ? "hit" : "hits"}.`;
                 const sunk = ship.isSunk();
                 if (sunk) { 
                     this.sunkShips++;
