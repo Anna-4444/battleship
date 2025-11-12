@@ -4,19 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Battleship</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&family=Quantico:ital,wght@0,400;0,700;1,400;1,700&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 </head>
 <body>
-    <header>
+    <header class="header hide">
         <h1>BATTLESHIP</h1>
     </header>
 
-    <section class="main-container"></section>
+    <section class="main-container hide"></section>
 
     <section class="landing-page">
+        <h1>BATTLESHIP</h1>
         <div class="button-div"></div>
         <button class="rules-btn">VIEW RULES</button>
         <div class="rules-div">
-            <!-- <button class="rules-btn">VIEW RULES</button> -->
             <div class="rules hide">
                 <h3>Objective</h3>
                 <p>~ Sink all of your opponent's ships before they sink yours.</p>
@@ -31,6 +34,7 @@
                 <br>  - Destroyer- 2 squares</p>
                 <h3>Gameplay</h3>
                 <p>~ Players take turns attacking a target square on the opponent's grid.
+                <br>~ If the attack is a hit, the player continues attacking, until they miss.
                 <br>~ When all squares of a ship have been hit, that ship is sunk.</p>
                 <h3>Winning</h3>
                 <p>~ The first player to sink all of the opponent's ships wins the game.</p>
@@ -42,8 +46,8 @@
         <div class="form-div">
             <form id="one-play-form">
                 <div>
-                    <label for="1playername">Player 1 Name: </label>
-                    <input type="text" id="1playername" name="player1" required>
+                    <label for="playername">Player Name: </label>
+                    <input type="text" id="playername" name="player" required>
                 </div>
                 <div class="button-div"></div>
             </form>

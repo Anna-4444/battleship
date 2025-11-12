@@ -1,16 +1,20 @@
-import { renderPassScreen } from "./render-pass-screen";
-
+import { handleAttack } from "./helpers";
 
 export function renderBoard(player, opponent) {
 
     const container = document.querySelector(".main-container");
     container.innerHTML = "";
+
     const messageContainer = document.createElement("div");
     messageContainer.classList.add("message");
+    messageContainer.innerHTML = `<p>${player.name}'s Turn</p>`;
+
     const boardContainer = document.createElement("div");
     boardContainer.classList.add("boards");
+
     const buttonContainer = document.createElement("div")
     buttonContainer.classList.add("button-div")
+
     container.append(messageContainer, boardContainer, buttonContainer);
     
     const defenceBoardContainer = document.createElement("div");
@@ -36,7 +40,6 @@ export function renderBoard(player, opponent) {
                     squareDiv.classList.add("occupied");
                     break;
             }
-     
             rowDiv.append(squareDiv);
         })
         defenceBoardContainer.append(rowDiv); 
@@ -63,44 +66,24 @@ export function renderBoard(player, opponent) {
                     squareDiv.classList.add("hit");
                     break;
             }
-            squareDiv.addEventListener("click", (event) => {
-                if (!attackEnabled) return;
-                attackEnabled = false;
-                handleAttack(player, opponent, r, c, event);
-                // attackBoardContainer.classList.add("disabled");
+            squareDiv.addEventListener("click", () => {
+                if (!attackEnabled) return; // Disable board after a miss
+                attackEnabled = handleAttack(player, opponent, r, c, event);
+                // If the handleAttack() returned false (meaning it was a miss) and the opponent is the computer 
+                // then it is the computers turn to generateAttack()
+                if (opponent.player === "computer" && !attackEnabled) {
+                    setTimeout(() => {
+                        opponent.generateAttack(player, opponent)
+                    }, 1000);
+                }
             }) 
             rowDiv.append(squareDiv);
         }) 
         attackBoardContainer.append(rowDiv);
     })
-    
     boardContainer.append(defenceBoardContainer, attackBoardContainer);
-
-    const switchBtn = document.createElement("button");
-    switchBtn.innerText = "SWITCH PLAYERS";
-    switchBtn. addEventListener("click", () => {
-        renderPassScreen(player, opponent);
-    });
-    buttonContainer.append(switchBtn);
 }
 
-export function handleAttack(player, opponent, r, c, event) {
-    const messageContainer = document.querySelector(".message");
-    messageContainer.innerText = "";
-    
-    const result = opponent.gameboard.receiveAttack(player, r, c, event);
-    if (!result) {
-        messageContainer.innerText = "That location has already been attacked, try again";
-        return;
-    }
-    if (result.result === "miss") {
-        event.target.classList.add("miss");
-        messageContainer.innerText = result.message;
-    };  
-    if (result.result === "hit") {
-        event.target.classList.add("hit");
-        messageContainer.innerText = result.message;
-    }
-    // if (sunk) {...} I could add an effect for a sunk ship // disable board and pass device
-    // if (gameover) { gameover()} ... maybe just add a button the says play again or reset? disable the board
+
+export function sendAttack(event) {   
 }

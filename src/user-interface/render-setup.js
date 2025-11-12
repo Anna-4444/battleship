@@ -4,6 +4,8 @@ import cruiserPic from "../assets/cruiser.png";
 import subPic from "../assets/submarine.png";
 import destroyerPic from "../assets/destroyer.png";
 import { renderPassScreen } from "./render-pass-screen";
+import { clearHighlights, createShipContainer } from "./helpers.js"
+import { renderBoard } from "./render-board.js";
 
 export function renderSetup(player, opponent) {
 
@@ -18,7 +20,7 @@ export function renderSetup(player, opponent) {
     const messageContainer = document.createElement("div");
     messageContainer.classList.add("message");
     messageContainer.innerHTML = `
-    <p>${player.name} Set-up. 
+    <p>${player.name} prepare for battle! 
     <br> Drag the ships to place them on your ocean grid. 
     <br>Click the Rotate button to change the ship's orientation. 
     <br>Click DONE when finished. </p>`;
@@ -81,16 +83,21 @@ export function renderSetup(player, opponent) {
     
     // Rotate button
     const rotateBtn = document.createElement("button");
-    rotateBtn.innerText = "Rotate Ships";
-    rotateBtn.addEventListener("click", () => isHorizontal = !isHorizontal)
-
+    rotateBtn.innerHTML = `ROTATE SHIPS <span><i class="fa-solid fa-arrows-left-right"></i></span>`;
+    rotateBtn.addEventListener("click", () => {
+        isHorizontal 
+            ? rotateBtn.innerHTML = `ROTATE SHIPS <span><i class="fa-solid fa-arrows-up-down"></i></span>` 
+            : rotateBtn.innerHTML = `ROTATE SHIPS <span><i class="fa-solid fa-arrows-left-right"></i></span>`;
+        isHorizontal = !isHorizontal
+    })
+    
     // Create the ships
     const carrier = createShipContainer("ship-container", "Carrier 5", carrierPic, "ships", 5, "carrier");
     const battleship = createShipContainer("ship-container", "Battleship 4", battleshipPic, "ships", 4, "battleship");
     const cruiser = createShipContainer("ship-container", "Cruiser 3", cruiserPic, "ships", 3, "cruiser");
     const submarine = createShipContainer("ship-container","Submarine 3", subPic, "ships", 3, "submarine");
     const destroyer = createShipContainer("ship-container","Destroyer 2", destroyerPic, "ships", 2, "destroyer");
-
+    
     shipyard.append(rotateBtn, carrier, battleship, cruiser, submarine, destroyer)
     boardContainer.append(defenceBoardContainer, shipyard);
 
@@ -98,7 +105,6 @@ export function renderSetup(player, opponent) {
     const ships = document.querySelectorAll(".ships");
     ships.forEach((ship) => {
         ship.addEventListener("dragstart", () => {
-            console.log("drag Started")
             draggedShip = ship;
             shipLength = Number(ship.dataset.length);
             shipName = ship.dataset.name;
@@ -112,46 +118,20 @@ export function renderSetup(player, opponent) {
     });
     
     // Create done and reset buttons
+    const resetBtn = document.createElement("button");
+    resetBtn.innerText = "RESET";
+    resetBtn.addEventListener("click", function(e) {
+        player.gameboard.oceanGrid = Array.from({ length: 10 }, () => Array(10).fill(0));
+        player.gameboard.shipFleet = [];
+        renderSetup(player, opponent)
+    });
+    
     const doneBtn = document.createElement("button");
     doneBtn.innerText = "DONE";
     doneBtn.addEventListener("click", function(e) {
         if (player.gameboard.shipFleet.length < 5) return;
-        renderPassScreen(player, opponent);
+        opponent.player === "computer" ? renderBoard(player, opponent) : renderPassScreen(player, opponent);
     });
-    const resetBtn = document.createElement("button");
-    resetBtn.innerText = "RESET";
-    resetBtn.addEventListener("click", function(e) {
-        if (player.player === "player1") {
-            player.gameboard.oceanGrid = Array.from({ length: 10 }, () => Array(10).fill(0));
-            renderSetup(player, opponent)
-        }
-        if (player.player === "player2") {
-            player.gameboard.oceanGrid = Array.from({ length: 10 }, () => Array(10).fill(0));
-            renderSetup(player, opponent)
-        }
-    });
-    buttonContainer.append(doneBtn, resetBtn);   
-}
 
-// Remove highlights
-function clearHighlights() {
-  document.querySelectorAll(".square").forEach(sq => {
-    sq.classList.remove("highlight", "invalid");
-  });
-}
-
-// Ship containers
-function createShipContainer(containerClassName, title, path, shipClassName, length, ship) {
-    const myDiv = document.createElement("div");
-    myDiv.classList.add(containerClassName);
-    const myPara = document.createElement("p");
-    myPara.innerText = title;
-    const shipImg = document.createElement("img");
-    shipImg.src = path;
-    shipImg.classList.add(shipClassName);
-    shipImg.dataset.length = length;
-    shipImg.dataset.name = ship;
-    shipImg.draggable = true;
-    myDiv.append(shipImg, myPara);
-    return myDiv;
+    buttonContainer.append(resetBtn, doneBtn);   
 }

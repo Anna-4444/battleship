@@ -15,20 +15,20 @@ export function renderPassScreen(player, opponent) {
     const messageContainer = document.createElement("div");
     messageContainer.classList.add("message");
     messageContainer.innerHTML = `
-    <p>${player.name}'s turn. 
-    <br>Pass the device to ${player.name}.</p>`;
+    <p>${player.name}'s turn.</p> 
+    <p>Pass the device to ${player.name}.</p>`;
     
     const buttonContainer = document.createElement("div")
-    buttonContainer.classList.add("button-div")
-    
-    container.append(messageContainer, buttonContainer);
-    
+    buttonContainer.classList.add("message")
+    buttonContainer.innerHTML = `<p>${player.name}, click here when ready:</p>`;
 
     const passBtn = document.createElement("button");
-    passBtn.innerText = `${player.name} click here when ready`;
+    passBtn.innerText = "I'M READY!";
     passBtn.addEventListener("click", () => {
         player.gameboard.shipFleet.length === 5 ? renderBoard(player, opponent) : renderSetup(player, opponent)
     })    
 
     buttonContainer.append(passBtn)
+
+    container.append(messageContainer, buttonContainer);
 }
