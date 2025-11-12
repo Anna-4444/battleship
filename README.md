@@ -5,6 +5,11 @@ This project was created as part of [The Odin Project](https://www.theodinprojec
 
 ---
 
+## Live Preview
+[Click here:](https://anna-4444.github.io/battleship/)
+
+---
+
 ##  Features
 
 - **Single Player Mode:** Play against a computer opponent that makes random attacks.  
@@ -32,3 +37,9 @@ This project was created as part of [The Odin Project](https://www.theodinprojec
 - **npm** – Dependency and build management  
 
 ---
+
+## thanks to
+
+- Photo by Misael Consuelos: https://www.pexels.com/photo/warship-in-a-dock-at-sunset-8158676/
+- Water splash sound effect by universfield from Pixabay
+- Explostion Sound Effect by DRAGON-STUDIO from Pixabay

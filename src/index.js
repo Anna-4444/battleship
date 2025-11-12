@@ -7,7 +7,3 @@ dom.watch()
 
 
 renderLandingPage();
-
-// Photo by Misael Consuelos: https://www.pexels.com/photo/warship-in-a-dock-at-sunset-8158676/
-// water splash sound effect by universfield from Pixabay
-// explostion Sound Effect by DRAGON-STUDIO from Pixabay

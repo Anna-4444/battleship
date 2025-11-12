@@ -1,5 +1,5 @@
-import carrierPic from "../assets/carrier.png";
-import battleshipPic from "../assets/battleship.png";
+import carrierPic from "../assets/carrier.svg";
+import battleshipPic from "../assets/battleship.svg";
 import cruiserPic from "../assets/cruiser.png";
 import subPic from "../assets/submarine.png";
 import destroyerPic from "../assets/destroyer.png";
